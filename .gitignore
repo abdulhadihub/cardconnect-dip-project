@@ -1,0 +1,9 @@
+# Ignore the node_modules folder
+node_modules/
+
+# Ignore all image files (assuming they have common extensions like .jpg, .png, .gif, etc.)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
