@@ -10,3 +10,7 @@ node_modules/
 
 # ignore all files in the extracted_text folder
 extracted_text/
+
+# ignore all files in the text_to_json folder
+text_to_json/
+
