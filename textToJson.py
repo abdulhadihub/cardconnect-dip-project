@@ -25,6 +25,8 @@ def save_to_json(data, json_path):
         json.dump(data, file, indent=4)
 
 def process_files(folder_path, output_folder):
+     
+    os.makedirs(output_folder, exist_ok=True)
     # Iterate over all files in the folder
     for filename in os.listdir(folder_path):
         file_path = os.path.join(folder_path, filename)
