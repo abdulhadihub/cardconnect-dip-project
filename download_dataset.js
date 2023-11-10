@@ -1,4 +1,3 @@
-const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
@@ -519,7 +518,7 @@ if (!fs.existsSync(downloadDirectory)) {
 async function downloadImages() {
     for (let i = 500; i <= imageUrls.length; i++) {
         try {
-            const response = await axios.get(imageUrls[i], { responseType: 'stream' });
+            const response = await fetch(imageUrls[i], { responseType: 'stream' });
             const filename = path.join(downloadDirectory, `image_${i + 1}.jpg`);
             const writer = fs.createWriteStream(filename);
             response.data.pipe(writer);
