@@ -7,3 +7,6 @@ node_modules/
 *.png
 *.gif
 *.bmp
+
+# ignore all files in the extracted_text folder
+extracted_text/
