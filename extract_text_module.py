@@ -56,11 +56,20 @@ class ImageProcessor:
                 if showROI:
                     plt.imshow(roi)
                     plt.show()
+                    
 
                 ocr_result = pytesseract.image_to_string(roi, lang='eng', config='--psm 6')
                 ocr_result = ocr_result.split('\n')
                 for item in ocr_result:
                     results.append(item)
+                    
+        if showROI:
+            plt.figure(figsize=(10,10))
+            plt.subplot(311),plt.imshow(base_image),plt.title('Original')
+            plt.subplot(312),plt.imshow(dilate, cmap='gray'),plt.title('Dilated')
+            plt.subplot(313),plt.imshow(image),plt.title('With Boxes')
+            plt.tight_layout()
+            plt.show()
 
         entities = []
         for item in results:

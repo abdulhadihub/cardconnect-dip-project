@@ -12,7 +12,7 @@ class ImageTransformer:
         if event == cv2.EVENT_LBUTTONDOWN:
             self.circles[self.counter] = x, y
             self.counter += 1
-            print(self.circles)
+            # print(self.circles)
 
     def transform_image(self):
         if self.image is None:
@@ -52,7 +52,7 @@ class ImageTransformer:
         # Release resources
         cv2.destroyAllWindows()
 
-        return resized_img
+        return img_output
 
 def main():
     input_image_path = "image_downloads/image_540.jpg"
