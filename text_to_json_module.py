@@ -21,8 +21,8 @@ class TextExtractor:
 
         entity_info = {
             
-            'Phone': phone_match.group(0) if phone_match else None,
-            'Email': email_match.group(0) if email_match else None,
+            'phone': phone_match.group(0) if phone_match else None,
+            'email': email_match.group(0) if email_match else None,
         }
 
         

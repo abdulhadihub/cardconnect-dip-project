@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, Image, ActivityIndicator, TouchableOpacity, Button } from 'react-native'
 import { useRoute } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-
+import axios from 'axios';
 
 
 const Uploaded = () => {
@@ -21,13 +21,20 @@ const Uploaded = () => {
 
 
     const handleExtract = async () => {
-        setLoading(true)
-        // extract information from image
-        let extractedInfo = await axios.post('http://192.168.100.16:5000/process-image', { image_url: url }, { headers: { 'Content-Type': 'application/json' } })
-        setLoading(false)
-        setIsExtracted(true)
-        console.log("extracted info ", extractedInfo.data)
-        setInfo({ name: "Nasir Mehmood", address: "C-36/10, Main Boulevard, Lake City Riwind Eoad Lahore", contact: "0308-5086404", email: "moazzamassociates@gmail" })
+        try {
+            setLoading(true)
+            // extract information from image
+            let extractedInfo = await axios.post('http://192.168.100.16:5000/process-image', { image_url: url }, { headers: { 'Content-Type': 'application/json' } })
+            console.log("extractedInfo ", extractedInfo.data)
+            setInfo({ name: "Nasir Mehmood", address: "C-36/10, Main Boulevard, Lake City Riwind Eoad Lahore", contact: "0308-5086404", email: "moazzamassociates@gmail" })
+        }
+        catch (error) {
+            console.log(error)
+        }
+        finally {
+            setLoading(false)
+            setIsExtracted(true)
+        }
     }
 
     return (
@@ -45,6 +52,14 @@ const Uploaded = () => {
             {/* extracted information */}
             {isExtracted && <View style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>Extracted Information</Text>
+
+                {/* BY HADI START */}
+                <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "90%", marginTop: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>Raw Data Extracted</Text>
+                    <Text style={{ fontSize: 16 }}>{extractedInfo?.data?.email}</Text>
+                    <Text style={{ fontSize: 16 }}>{extractedInfo?.data?.phone}</Text>
+                </View>
+                {/* BY HADI END */}
 
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "90%", marginTop: 10 }}>
                     <Text style={{ fontSize: 16, fontWeight: "bold" }}>Name</Text>

@@ -12,7 +12,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return 'Hello World!'
+    return 'Welcome to CardConnect!'
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
