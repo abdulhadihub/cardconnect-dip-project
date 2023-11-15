@@ -18,15 +18,16 @@ const Uploaded = () => {
     const { url } = route.params;
     console.log("url ", url)
 
-    const handleExtract = () => {
+
+
+    const handleExtract = async () => {
         setLoading(true)
         // extract information from image
+        let extractedInfo = await axios.post('http://192.168.100.16:5000/process-image', { image_url: url }, { headers: { 'Content-Type': 'application/json' } })
+        setLoading(false)
+        setIsExtracted(true)
+        console.log("extracted info ", extractedInfo.data)
         setInfo({ name: "Nasir Mehmood", address: "C-36/10, Main Boulevard, Lake City Riwind Eoad Lahore", contact: "0308-5086404", email: "moazzamassociates@gmail" })
-
-        setTimeout(() => {
-            setLoading(false)
-            setIsExtracted(true)
-        }, 3000)
     }
 
     return (
@@ -71,22 +72,22 @@ const Uploaded = () => {
                 </View>
             </View>}
             {/* button extract information  */}
-            
-            {isExtracted ? <View style={{display:"flex", flexDirection:"row", marginTop: 10, padding: 10, borderRadius: 10 , justifyContent:"center", alignItems:"center" }}>
-                <TouchableOpacity onPress={()=>setIsExtracted(false)} style={{display:"flex",marginLeft:5, flexDirection:"row", backgroundColor: "red", padding: 10, marginTop: 10 }}>
+
+            {isExtracted ? <View style={{ display: "flex", flexDirection: "row", marginTop: 10, padding: 10, borderRadius: 10, justifyContent: "center", alignItems: "center" }}>
+                <TouchableOpacity onPress={() => setIsExtracted(false)} style={{ display: "flex", marginLeft: 5, flexDirection: "row", backgroundColor: "red", padding: 10, marginTop: 10 }}>
                     <FontAwesome name="trash" size={24} color="white" />
-                    <Text style={{ color: "white", fontSize: 18, marginLeft:5 }}>Delete</Text>
+                    <Text style={{ color: "white", fontSize: 18, marginLeft: 5 }}>Delete</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setIsExtracted(false)} style={{display:"flex",marginLeft:5, flexDirection:"row", backgroundColor: "#027AFD", padding: 10, marginTop: 10 }}>
+                <TouchableOpacity onPress={() => setIsExtracted(false)} style={{ display: "flex", marginLeft: 5, flexDirection: "row", backgroundColor: "#027AFD", padding: 10, marginTop: 10 }}>
                     <FontAwesome name='save' size={24} color="white" />
-                    <Text style={{ color: "white", fontSize: 18, marginLeft:5 }}>Save</Text>
+                    <Text style={{ color: "white", fontSize: 18, marginLeft: 5 }}>Save</Text>
                 </TouchableOpacity>
             </View>
-            :<View style={{ marginTop: 10, padding: 10, borderRadius: 10 , justifyContent:"center", alignItems:"center" }}>
-                <TouchableOpacity onPress={handleExtract} style={{ backgroundColor: "#027AFD", padding: 10 }}>
-                    <Text style={{ color: "white", fontSize: 16 }}>Extract Information</Text>
-                </TouchableOpacity>
-            </View>}
+                : <View style={{ marginTop: 10, padding: 10, borderRadius: 10, justifyContent: "center", alignItems: "center" }}>
+                    <TouchableOpacity onPress={handleExtract} style={{ backgroundColor: "#027AFD", padding: 10 }}>
+                        <Text style={{ color: "white", fontSize: 16 }}>Extract Information</Text>
+                    </TouchableOpacity>
+                </View>}
 
         </View>
     );

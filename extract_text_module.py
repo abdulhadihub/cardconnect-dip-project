@@ -9,8 +9,7 @@ class ImageProcessor:
 
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-    def process_image(self, input_image_path, deskew=False, showROI=False):
-        input_image = cv2.imread(input_image_path)
+    def process_image(self, input_image, deskew=False, showROI=False):
 
         if deskew:
             from deskew_image_module import ImageTransformer
