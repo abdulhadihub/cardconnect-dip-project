@@ -26,11 +26,9 @@ def process_image():
         # Decode the image using OpenCV
         image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
 
-        # Perform image processing using your ImageProcessor class
+        
         image_processor = ImageProcessor()
         detected_entities = image_processor.process_image(image, deskew=False, showROI=False)
-
-        # Perform text extraction using your TextExtractor class
         text_extractor = TextExtractor()
         extracted_data = text_extractor.extract_info_from_list(detected_entities)
 
