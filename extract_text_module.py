@@ -7,7 +7,7 @@ class ImageProcessor:
     def __init__(self):
         pass
 
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+        # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
     def process_image(self, input_image_path, deskew=False, showROI=False):
         input_image = cv2.imread(input_image_path)
@@ -76,7 +76,7 @@ class ImageProcessor:
 
 
 def main():
-    input_image_path = "image_downloads/image_540.jpg"
+    input_image_path = "/home/najam/Documents/dip/cardconnect-dip-project/image_downloads/image_35.jpg"
     image_processor = ImageProcessor()
     detected_entities = image_processor.process_image(input_image_path, deskew=True, showROI=True)
     print("Detected Entities:")
