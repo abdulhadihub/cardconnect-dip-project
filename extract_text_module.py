@@ -7,7 +7,7 @@ class ImageProcessor:
     def __init__(self):
         pass
 
-        # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
     def process_image(self, input_image_path, deskew=False, showROI=False):
         input_image = cv2.imread(input_image_path)
@@ -68,7 +68,6 @@ class ImageProcessor:
             item = item.strip().replace('\n', '').replace('\x0c', '')
 
             if len(item) > 0:
-                print(item)
                 entities.append(item)
 
         entities = list(set(entities))
