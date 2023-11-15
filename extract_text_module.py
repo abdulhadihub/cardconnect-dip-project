@@ -68,7 +68,6 @@ class ImageProcessor:
             item = item.strip().replace('\n', '').replace('\x0c', '')
 
             if len(item) > 0:
-                print(item)
                 entities.append(item)
 
         entities = list(set(entities))
@@ -76,7 +75,7 @@ class ImageProcessor:
 
 
 def main():
-    input_image_path = "image_downloads/image_540.jpg"
+    input_image_path = "/home/najam/Documents/dip/cardconnect-dip-project/image_downloads/image_35.jpg"
     image_processor = ImageProcessor()
     detected_entities = image_processor.process_image(input_image_path, deskew=True, showROI=True)
     print("Detected Entities:")
