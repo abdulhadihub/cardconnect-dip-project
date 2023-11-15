@@ -53,14 +53,6 @@ const Uploaded = () => {
             {isExtracted && <View style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>Extracted Information</Text>
 
-                {/* BY HADI START */}
-                <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "90%", marginTop: 10 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>Raw Data Extracted</Text>
-                    <Text style={{ fontSize: 16 }}>{extractedInfo?.data?.email}</Text>
-                    <Text style={{ fontSize: 16 }}>{extractedInfo?.data?.phone}</Text>
-                </View>
-                {/* BY HADI END */}
-
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "90%", marginTop: 10 }}>
                     <Text style={{ fontSize: 16, fontWeight: "bold" }}>Name</Text>
                     <Text style={{ fontSize: 16 }}>{info.name}</Text>
