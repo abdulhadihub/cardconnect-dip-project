@@ -1,1 +1,0 @@
-for entity in entity_list:

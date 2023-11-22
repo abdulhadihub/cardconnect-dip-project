@@ -28,7 +28,7 @@ def process_image():
 
         
         image_processor = ImageProcessor()
-        detected_entities = image_processor.process_image(image, deskew=False, showROI=False)
+        detected_entities = image_processor.process_image(image, False, True, 50, 5, 5000, 1000000)
         text_extractor = TextExtractor()
         extracted_data = text_extractor.extract_info_from_list(detected_entities)
 

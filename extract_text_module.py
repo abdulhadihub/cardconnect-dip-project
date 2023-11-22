@@ -9,7 +9,11 @@ class ImageProcessor:
 
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-    def process_image(self, input_image, deskew=False, showROI=False):
+    def process_image(self, input_image, deskew=False, showROI=False, rectLength=50, rectWidth=5, minContourArea=5000, maxContourArea=1000000):
+        self.rectLength = rectLength
+        self.rectWidth = rectWidth
+        self.minContourArea = minContourArea
+        self.maxContourArea = maxContourArea
 
         if deskew:
             from deskew_image_module import ImageTransformer
@@ -25,7 +29,7 @@ class ImageProcessor:
         blur = cv2.GaussianBlur(gray, (11, 11), 0)
         thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (50, 5))
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (self.rectLength, self.rectWidth))
         dilate = cv2.dilate(thresh, kernel, iterations=1)
 
         contours = cv2.findContours(dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -36,8 +40,8 @@ class ImageProcessor:
         for c in contours:
             x, y, w, h = cv2.boundingRect(c)
             contour_area = cv2.contourArea(c)
-            min_contour_area = 5000
-            max_contour_area = 1000000
+            min_contour_area = self.minContourArea
+            max_contour_area = self.maxContourArea
 
             # Filter contours based on size
             if min_contour_area < contour_area < max_contour_area:
@@ -74,9 +78,10 @@ class ImageProcessor:
 
 
 def main():
-    input_image_path = "/home/najam/Documents/dip/cardconnect-dip-project/image_downloads/image_35.jpg"
+    input_image_path = "image_downloads/image_6.jpg"
+    input_image = cv2.imread(input_image_path)
     image_processor = ImageProcessor()
-    detected_entities = image_processor.process_image(input_image_path, deskew=True, showROI=True)
+    detected_entities = image_processor.process_image(input_image, False, False, 50, 5, 1000000, 1000000000)
     print("Detected Entities:")
     for entity in detected_entities:
         print(entity)
