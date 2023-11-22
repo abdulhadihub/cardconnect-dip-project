@@ -56,24 +56,19 @@ class ImageProcessor:
                 ocr_result = pytesseract.image_to_string(roi, lang='eng', config='--psm 6')
                 ocr_result = ocr_result.split('\n')
                 for item in ocr_result:
-                    results.append(item)
+                    if len(item) > 0:
+                        item = item.strip()
+                        results.append(item)
                     
         if showROI:
             plt.figure(figsize=(10,10))
-            plt.subplot(311),plt.imshow(base_image),plt.title('Original')
+            plt.subplot(311),plt.imshow(base_image, ),plt.title('Original')
             plt.subplot(312),plt.imshow(dilate, cmap='gray'),plt.title('Dilated')
             plt.subplot(313),plt.imshow(image),plt.title('With Boxes')
             plt.tight_layout()
             plt.show()
 
-        entities = []
-        for item in results:
-            item = item.strip().replace('\n', '').replace('\x0c', '')
-
-            if len(item) > 0:
-                entities.append(item)
-
-        entities = list(set(entities))
+        entities = list(set(results))
         return entities
 
 
@@ -81,7 +76,7 @@ def main():
     input_image_path = "image_downloads/image_6.jpg"
     input_image = cv2.imread(input_image_path)
     image_processor = ImageProcessor()
-    detected_entities = image_processor.process_image(input_image, False, False, 50, 5, 1000000, 1000000000)
+    detected_entities = image_processor.process_image(input_image, False, False, 100, 50, 100000, 10000000000)
     print("Detected Entities:")
     for entity in detected_entities:
         print(entity)
