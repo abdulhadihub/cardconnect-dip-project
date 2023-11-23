@@ -15,6 +15,7 @@ class ImageProcessor:
         self.minContourArea = minContourArea
         self.maxContourArea = maxContourArea
 
+        # DESKEW
         if deskew:
             from deskew_image_module import ImageTransformer
             image_transformer = ImageTransformer(input_image)
@@ -26,10 +27,13 @@ class ImageProcessor:
     def _process_image_internal(self, image, showROI):
         base_image = image.copy()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # BLURRING
         blur = cv2.GaussianBlur(gray, (11, 11), 0)
+        # THRESHOLDING
         thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (self.rectLength, self.rectWidth))
+        # DILATION
         dilate = cv2.dilate(thresh, kernel, iterations=1)
 
         contours = cv2.findContours(dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -38,6 +42,7 @@ class ImageProcessor:
         results = []
 
         for c in contours:
+            # SEGMENTATION
             x, y, w, h = cv2.boundingRect(c)
             contour_area = cv2.contourArea(c)
             min_contour_area = self.minContourArea
