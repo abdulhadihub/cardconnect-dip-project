@@ -2,10 +2,13 @@ import cv2
 import numpy as np
 import pytesseract
 from matplotlib import pyplot as plt
+import json
+import spacy
 
 class ImageProcessor:
     def __init__(self):
-        pass
+        self.nlp = spacy.load("en_core_web_sm")
+        
 
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
@@ -75,16 +78,28 @@ class ImageProcessor:
 
         entities = list(set(results))
         return entities
+    def extract_info_from_text(self, text):
+        doc = self.nlp(text)
+
+        entity_info = {
+            'names': [ent.text for ent in doc.ents if ent.label_ == 'PERSON'],
+            'addresses': [ent.text for ent in doc.ents if ent.label_ == 'GPE'],
+            'phone': [match.group(0) for match in self.phone_pattern.finditer(text)],
+            'email': [match.group(0) for match in self.email_pattern.finditer(text)],
+        }
+
+        return json.dumps(entity_info, indent=4)
 
 
 def main():
     input_image_path = "image_downloads/image_6.jpg"
+    
     input_image = cv2.imread(input_image_path)
     image_processor = ImageProcessor()
     detected_entities = image_processor.process_image(input_image, False, False, 100, 50, 100000, 10000000000)
     print("Detected Entities:")
-    for entity in detected_entities:
-        print(entity)
+    print(detected_entities)
+    print(image_processor.extract_info_from_text(" ".join(detected_entities)))
 
 if __name__ == "__main__":
     main()
