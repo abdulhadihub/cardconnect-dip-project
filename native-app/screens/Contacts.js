@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, SectionList, TouchableOpacity, StyleSheet, Linking } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const TextAvatar = ({ backgroundColor, textColor, children }) => {
@@ -23,35 +24,28 @@ const TextAvatar = ({ backgroundColor, textColor, children }) => {
         </View>
     );
 };
+const getAsyncFinal = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('allContacts')
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+        console.log(e);
+    }
+}
 const Contact = ({ navigation }) => {
     // Dummy contact data for demonstration
-    const contacts = [
-        { id: '1', name: 'John Doe', phone: '123-456-7890', email:"text@test.com" },
-        { id: '1', name: 'Doe Boe', phone: '123-456-7890', email:"text@test.com" },
-        { id: '2', name: 'Ali Raza', phone: '987-654-3210', email:"text@test.com" },
-        { id: '3', name: 'Abdul Hadi', phone: '987-654-3210', email:"text@test.com" },
-        { id: '4', name: 'Najam Ul Hassan', phone: '987-654-3210', email:"text@test.com" },
-        { id: '5', name: 'jami Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '6', name: 'june Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '7', name: 'kainat Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '8', name: 'Ayesha Nadeem', phone: '987-654-3210', email:"text@test.com" },
-        { id: '9', name: 'jimi Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '10', name: 'baloch Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '11', name: 'abdul Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '12', name: 'hadi Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '13', name: 'najam Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '14', name: 'John Doe', phone: '123-456-7890', email:"text@test.com" },
-        { id: '15', name: 'Jane Smith', phone: '987-654-3210', email:"text@test.com" },
-        { id: '16', name: 'Alice Adams', phone: '555-1234-5678', email:"text@test.com" },
-        { id: '17', name: 'Bob Brown', phone: '555-9876-5432', email:"text@test.com" },
-        // Add more contacts as needed
-    ];
+    const [contacts, setContacts] = React.useState([])
+    React.useEffect(async() => {
+        const data = await getAsyncFinal()
+        console.log("datadadadada", data)
+        setContacts(data)
+    }, [navigation])
 
     // sort contacts by name
-    contacts.sort((a, b) => a.name.localeCompare(b.name));
+    contacts?.sort((a, b) => a.name.localeCompare(b.name));
 
     // Convert contacts data into sections based on the first letter of the name
-    const sections = contacts.reduce((acc, contact) => {
+    const sections = contacts?.reduce((acc, contact) => {
         const firstLetter = contact.name.charAt(0).toUpperCase();
         if (!acc[firstLetter]) {
             acc[firstLetter] = [];
@@ -80,12 +74,12 @@ const Contact = ({ navigation }) => {
                 textColor={'#ffffff'}
             >{item.name}</TextAvatar>
             <View style={styles.between}>
-                <Text style={{ fontSize: 20, marginLeft: 10, textTransform: 'capitalize' }}>{item.name}</Text>
+                <Text style={{ fontSize: 20, marginLeft: 10, textTransform: 'capitalize' }}>{item?.name}</Text>
                 <View style={{flexDirection:"row", alignItems:"center"}}>
                     <TouchableOpacity style={{marginRight:10}} onPress={() => Linking.openURL(`mailto:${item?.email}`)}>
                         <Feather name="mail" size={25} color="black" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Linking.openURL(`tel:${item?.phone}`)}>
+                    <TouchableOpacity onPress={() => Linking.openURL(`tel:${item?.contact}`)}>
                         <Feather name="phone" size={20} color="black" />
                     </TouchableOpacity>
                 </View>
@@ -103,7 +97,7 @@ const Contact = ({ navigation }) => {
         <View style={styles.container}>
             <SectionList
                 sections={sectionsArray}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item?.image?.toString()}
                 renderItem={renderContactItem}
                 renderSectionHeader={renderSectionHeader}
                 stickySectionHeadersEnabled={true}

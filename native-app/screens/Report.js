@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, ActivityIndicator, FlatList, Image, StyleSheet } from 'react-native'
 import FAB from 'react-native-fab';
 import { FontAwesome } from '@expo/vector-icons';
@@ -6,99 +6,29 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from "expo-file-system";
 import { storage } from "../config/firebase.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Storage = getStorage(storage)
 
 
 
 const Report = ({ navigation }) => {
-    const data = [
-        {
-            id: '1',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0',
-            name: 'John Doe',
-            contact: '+1234567890',
-            email: 'john.doe@example.com',
-        },
-        {
-            id: '2',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0', // Replace with the actual image source
-            name: 'Jane Smith',
-            contact: '+9876543210',
-            email: 'jane.smith@example.com',
-        },
-        {
-            id: '1',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0',
-            name: 'John Doe',
-            contact: '+1234567890',
-            email: 'john.doe@example.com',
-        },
-        {
-            id: '2',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0', // Replace with the actual image source
-            name: 'Jane Smith',
-            contact: '+9876543210',
-            email: 'jane.smith@example.com',
-        },
-        {
-            id: '1',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0',
-            name: 'John Doe',
-            contact: '+1234567890',
-            email: 'john.doe@example.com',
-        },
-        {
-            id: '2',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0', // Replace with the actual image source
-            name: 'Jane Smith',
-            contact: '+9876543210',
-            email: 'jane.smith@example.com',
-        },
-        {
-            id: '1',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0',
-            name: 'John Doe',
-            contact: '+1234567890',
-            email: 'john.doe@example.com',
-        },
-        {
-            id: '2',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0', // Replace with the actual image source
-            name: 'Jane Smith',
-            contact: '+9876543210',
-            email: 'jane.smith@example.com',
-        },
-        {
-            id: '1',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0',
-            name: 'John Doe',
-            contact: '+1234567890',
-            email: 'john.doe@example.com',
-        },
-        {
-            id: '2',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0', // Replace with the actual image source
-            name: 'Jane Smith',
-            contact: '+9876543210',
-            email: 'jane.smith@example.com',
-        },
-        {
-            id: '1',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0',
-            name: 'John Doe',
-            contact: '+1234567890',
-            email: 'john.doe@example.com',
-        },
-        {
-            id: '2',
-            image: 'https://th.bing.com/th/id/R.6af6fd9c37f0de4abb34ea0fd20acce3?rik=55mqMmrTutVR0Q&pid=ImgRaw&r=0', // Replace with the actual image source
-            name: 'Jane Smith',
-            contact: '+9876543210',
-            email: 'jane.smith@example.com',
-        },
-
-        // Add more data as needed
-    ];
+    const [data, setData] = useState([])
+    const getAsyncFinal = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('allReports')
+            return jsonValue != null ? JSON.parse(jsonValue) : null;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    useEffect(() => {
+        const getFunction = async () => {
+        const data = await getAsyncFinal()
+        console.log("helo", data)
+        setData(data)
+        }
+        getFunction()
+    }, [navigation])
     const [loading, setLoading] = useState(false);
     const uploadMedia = async (image) => {
         setLoading(true);
@@ -171,11 +101,11 @@ const Report = ({ navigation }) => {
     };
     const renderItem = ({ item }) => (
         <View style={styles.itemContainer}>
-            <Image source={{ uri: item.image }} style={styles.avatar} />
+            <Image source={{ uri: item?.image }} style={styles.avatar} />
             <View style={styles.textContainer}>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text>{item.contact}</Text>
-                <Text>{item.email}</Text>
+                <Text style={styles.name}>{item?.name}</Text>
+                <Text>{item?.contact}</Text>
+                <Text>{item?.email}</Text>
             </View>
         </View>
     );
@@ -193,7 +123,7 @@ const Report = ({ navigation }) => {
                     <View >
                         <FlatList
                             data={data}
-                            keyExtractor={(item) => item.id}
+                            keyExtractor={(item) => item?.image}
                             renderItem={renderItem}
                         />
                     </View>
