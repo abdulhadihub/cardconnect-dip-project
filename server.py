@@ -28,10 +28,10 @@ def process_image():
 
         
         image_processor = ImageProcessor()
-        detected_entities = image_processor.process_image(image, False, True, 50, 5, 5000, 1000000)
+        detected_entities = image_processor.process_image(image, False, False, 50, 5, 5000, 1000000)
         text_extractor = TextExtractor()
         extracted_data = text_extractor.extract_info_from_list(detected_entities)
-
+        print(f"hello {extracted_data}")
         return extracted_data
     except Exception as e:
         return jsonify({'error': str(e)})
